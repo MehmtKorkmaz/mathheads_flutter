@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>404055859069-2v9v8hvjgkebfah9ufdaapt1vf8rrrqm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.404055859069-2v9v8hvjgkebfah9ufdaapt1vf8rrrqm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAY_HcO24_uu4KO27zu_e6lOM71tdgLCis</string>
+	<key>GCM_SENDER_ID</key>
+	<string>404055859069</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.socialMathematicians</string>
+	<key>PROJECT_ID</key>
+	<string>mathhead-8fb39</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mathhead-8fb39.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:404055859069:ios:be4f4f6665c353e7f63614</string>
+</dict>
+</plist>

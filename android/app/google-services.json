@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "404055859069",
+    "project_id": "mathhead-8fb39",
+    "storage_bucket": "mathhead-8fb39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404055859069:android:ca19f892a3231337f63614",
+        "android_client_info": {
+          "package_name": "com.example.social_mathematicians"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404055859069-18k3dnguss0kskfqidr94nftg6he2i98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB015wsiHPTAoJjiRm0cExyDlKdRcRwM4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404055859069-18k3dnguss0kskfqidr94nftg6he2i98.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
