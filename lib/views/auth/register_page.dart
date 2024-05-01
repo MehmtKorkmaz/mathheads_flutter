@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
+
 import 'package:social_mathematicians/services/auth_service.dart';
 import 'package:social_mathematicians/widgets/logo.dart';
 
@@ -17,7 +17,7 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends Const<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
@@ -40,7 +40,7 @@ class _RegisterPageState extends Const<RegisterPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-            color: themeData.primaryColor,
+            color: context.theme.primaryColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
@@ -59,7 +59,7 @@ class _RegisterPageState extends Const<RegisterPage> {
                 color: Color(0xFF9A9A9A),
               ),
               isObscured: false,
-              hintText: 'user name',
+              hintText: 'userName'.tr,
               controller: nameController,
             ),
             MyTextfield(
@@ -68,7 +68,7 @@ class _RegisterPageState extends Const<RegisterPage> {
                 color: Color(0xFF9A9A9A),
               ),
               isObscured: false,
-              hintText: 'email',
+              hintText: 'emailHint'.tr,
               controller: emailController,
             ),
             MyTextfield(
@@ -77,7 +77,7 @@ class _RegisterPageState extends Const<RegisterPage> {
                   color: Color(0xFF9A9A9A),
                 ),
                 isObscured: true,
-                hintText: 'password',
+                hintText: 'passwordHint'.tr,
                 controller: passwordController),
             MyTextfield(
                 icon: const Icon(
@@ -85,23 +85,23 @@ class _RegisterPageState extends Const<RegisterPage> {
                   color: Color(0xFF9A9A9A),
                 ),
                 isObscured: true,
-                hintText: 'password',
+                hintText: 'passwordHint'.tr,
                 controller: confirmController),
             const SizedBox(
               height: 20,
             ),
             MyButton(
-              buttonText: 'Sign Up',
+              buttonText: 'signUp'.tr,
               onTap: signUp,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Already have an account. '),
+                Text('accountText'.tr),
                 GestureDetector(
                   onTap: widget.onTap,
-                  child: const Text(
-                    'Login Now',
+                  child: Text(
+                    'loginText'.tr,
                     style: TextStyle(color: Colors.blueGrey),
                   ),
                 )

@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
                 if (post.type == 'public') {
                   return PostCard(post: post);
                 } else {
-                  return Container();
+                  return null;
                 }
               });
         },

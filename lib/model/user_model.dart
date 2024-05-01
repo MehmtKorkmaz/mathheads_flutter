@@ -34,7 +34,7 @@ class UserModel {
     return userAsMap;
   }
 
-  static UserModel fromSnapshot(DocumentSnapshot snapshot) {
+  factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     var snap = snapshot.data() as Map<String, dynamic>;
     return UserModel(
       userId: snap['userId'],
@@ -46,19 +46,5 @@ class UserModel {
       follows: snap['follows'] ?? [],
       posts: snap['posts'] ?? [],
     );
-  }
-
-  factory UserModel.fromjson(Map json) {
-    UserModel user = UserModel(
-      userId: json['userId'],
-      email: json['email'],
-      photoUrl: json['photoUrl'],
-      name: json['name'],
-      description: json['description'] ?? '',
-      followers: json['followers'] ?? [],
-      follows: json['follows'] ?? [],
-      posts: json['posts'] ?? [],
-    );
-    return user;
   }
 }

@@ -138,7 +138,7 @@ class FireStoreService extends GetxController {
     UserModel currentUser = await getUserModel(currentUserId);
 
     if (currentUser.follows.contains(uid)) {
-      //if current user's follows list  contains other user's ıd remove
+      //if current user's follows list  contains other user's ıd remove from list
       _firestore.collection('users').doc(currentUserId).update({
         'follows': FieldValue.arrayRemove([uid])
       });
@@ -147,7 +147,7 @@ class FireStoreService extends GetxController {
         'followers': FieldValue.arrayRemove([currentUserId])
       });
     } else {
-      //if current user's follows list not contains other user's ıd  add
+      //if current user's follows list not contains other user's ıd  add to list
       _firestore.collection('users').doc(currentUserId).update({
         'follows': FieldValue.arrayUnion([uid])
       });

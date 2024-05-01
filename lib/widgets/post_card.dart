@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
 import 'package:social_mathematicians/model/post_model.dart';
 import 'package:social_mathematicians/services/firestore_service.dart';
 import 'package:social_mathematicians/views/comment_screen.dart';
@@ -15,7 +15,7 @@ class PostCard extends StatefulWidget {
   State<PostCard> createState() => _PostCardState();
 }
 
-class _PostCardState extends Const<PostCard> {
+class _PostCardState extends State<PostCard> {
   PageController photoController = PageController();
 
   bool isLiked = false;
@@ -25,6 +25,14 @@ class _PostCardState extends Const<PostCard> {
     fireStoreService.postComment(commentController.text, widget.post.postId);
 
     commentController.clear();
+  }
+
+  void isPostLiked() {
+    if (widget.post.likes.contains(FirebaseAuth.instance.currentUser!.uid)) {
+      isLiked = false;
+    } else {
+      isLiked = true;
+    }
   }
 
   void showCommentPage() {
@@ -51,6 +59,7 @@ class _PostCardState extends Const<PostCard> {
 
   void likePost() {
     fireStoreService.likePost(widget.post.postId);
+    isPostLiked();
   }
 
   @override
@@ -114,9 +123,21 @@ class _PostCardState extends Const<PostCard> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         itemBuilder: (context) => [
-                              PopupMenuItem(child: Text('delete')),
-                              const PopupMenuItem(child: Text('about')),
-                              const PopupMenuItem(child: Text('about'))
+                              PopupMenuItem(
+                                  child: Text(
+                                'delete'.tr,
+                                style: context.textTheme.titleSmall,
+                              )),
+                              PopupMenuItem(
+                                  child: Text(
+                                'about'.tr,
+                                style: context.textTheme.titleSmall,
+                              )),
+                              PopupMenuItem(
+                                  child: Text(
+                                'copyLink'.tr,
+                                style: context.textTheme.titleSmall,
+                              ))
                             ])
                   ],
                 ),
@@ -127,8 +148,8 @@ class _PostCardState extends Const<PostCard> {
             GestureDetector(
               onDoubleTap: likePost,
               child: SizedBox(
-                height: dynamicHeight(0.5),
-                width: dynamicWidth(0.9),
+                height: context.height * (0.5),
+                width: context.width * (0.9),
                 child: PageView.builder(
                     controller: photoController,
                     itemCount: post.postPhotoUrl.length,
@@ -172,6 +193,7 @@ class _PostCardState extends Const<PostCard> {
 
             // COMMENTS,LİKES,FORWARD,TİME
 
+            //Like Icon
             Padding(
               padding: const EdgeInsets.only(left: 20.0, bottom: 10, top: 5),
               child: Row(
@@ -182,6 +204,7 @@ class _PostCardState extends Const<PostCard> {
                         Icons.favorite_border_outlined,
                         color: (isLiked) ? Colors.red : Colors.black,
                       )),
+                  //Comments
                   Padding(
                     padding: const EdgeInsets.only(right: 15.0),
                     child: Text(
@@ -197,6 +220,7 @@ class _PostCardState extends Const<PostCard> {
                   GestureDetector(
                       onTap: showCommentPage,
                       child: Icon(Icons.chat_bubble_outline_rounded)),
+                  //Share
                   Padding(
                     padding: const EdgeInsets.only(right: 15.0, left: 1),
                     child: Text(

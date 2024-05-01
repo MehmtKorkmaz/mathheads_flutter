@@ -36,7 +36,7 @@ class AuthService extends GetxController {
           .createUserWithEmailAndPassword(email: email, password: password);
       singInWithEmailAndPassword(email, password);
       Get.snackbar('Done!', 'You can login now');
-      //after creating a new user create a new collection for user information to database
+      //after creating a new user create a new collection for the user information to database
 
       await _firestore
           .collection("users")

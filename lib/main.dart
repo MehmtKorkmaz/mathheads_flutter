@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:social_mathematicians/helpers/auth_gate.dart';
+import 'package:social_mathematicians/lang/language.dart';
 
 import 'firebase_options.dart';
 
@@ -17,6 +19,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translations: Messages(),
+      locale: const Locale('tr', 'TR'),
       theme: ThemeData(
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               backgroundColor: Color(0xFF222222)),
@@ -34,7 +38,10 @@ class MyApp extends StatelessWidget {
                   backgroundColor:
                       MaterialStatePropertyAll(Color(0xFF222222)))),
           scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(color: Colors.black87, elevation: 0),
+          appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              color: Colors.black87,
+              elevation: 0),
           primaryColor: Colors.blueGrey[100]),
       debugShowCheckedModeBanner: false,
       home: const AuthGate(),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
+
 import 'package:social_mathematicians/services/firestore_service.dart';
 import 'package:social_mathematicians/widgets/appbar_logo.dart';
 import 'package:social_mathematicians/widgets/my_button.dart';
@@ -17,7 +17,7 @@ class AddPost extends StatefulWidget {
   State<AddPost> createState() => _AddPostState();
 }
 
-class _AddPostState extends Const<AddPost> {
+class _AddPostState extends State<AddPost> {
   int itemcount = 0;
 
   StorageService storageService = Get.put(StorageService());
@@ -54,6 +54,7 @@ class _AddPostState extends Const<AddPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const AppbarLogo()),
       floatingActionButton: photoUrlList.isEmpty
           ? Container()
           : Align(
@@ -61,10 +62,12 @@ class _AddPostState extends Const<AddPost> {
               child: FloatingActionButton(
                 elevation: 10,
                 onPressed: imagePicker,
-                child: const Icon(Icons.add_a_photo),
+                child: const Icon(
+                  Icons.add_a_photo,
+                  color: Colors.white,
+                ),
               ),
             ),
-      appBar: AppBar(elevation: 14, title: const AppbarLogo()),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -75,8 +78,8 @@ class _AddPostState extends Const<AddPost> {
                     child: InkWell(
                       onTap: imagePicker,
                       child: Container(
-                        height: dynamicHeight(0.3),
-                        width: dynamicWidth(0.5),
+                        height: context.height * (0.3),
+                        width: context.width * (0.5),
                         decoration: ShapeDecoration(
                           color: Colors.black.withOpacity(0.08),
                           shape: RoundedRectangleBorder(
@@ -97,8 +100,8 @@ class _AddPostState extends Const<AddPost> {
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: SizedBox(
-                      height: dynamicHeight(0.3),
-                      width: dynamicWidth(1),
+                      height: context.height * (0.3),
+                      width: context.width * (1),
                       child: CarouselSlider.builder(
                         itemCount: photoUrlList.length,
                         options: CarouselOptions(
@@ -142,8 +145,8 @@ class _AddPostState extends Const<AddPost> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30.0, vertical: 10),
                         child: Text(
-                          'Private',
-                          style: themeData.textTheme.titleMedium,
+                          'private'.tr,
+                          style: context.theme.textTheme.titleMedium,
                         ),
                       ),
                     ),
@@ -156,8 +159,8 @@ class _AddPostState extends Const<AddPost> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30.0, vertical: 10),
                         child: Text(
-                          'Public',
-                          style: themeData.textTheme.titleMedium,
+                          'public'.tr,
+                          style: context.theme.textTheme.titleMedium,
                         ),
                       ),
                     ),
@@ -170,7 +173,7 @@ class _AddPostState extends Const<AddPost> {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: MyTextfield(
                 controller: descriptionController,
-                hintText: 'Write something...',
+                hintText: 'addPostHint'.tr,
                 isObscured: false,
                 icon: const Icon(
                   Icons.comment_bank,
@@ -180,7 +183,7 @@ class _AddPostState extends Const<AddPost> {
             ),
             //Share Button
             MyButton(
-              buttonText: 'Share',
+              buttonText: 'share'.tr,
               onTap: uploadPost,
             )
           ],

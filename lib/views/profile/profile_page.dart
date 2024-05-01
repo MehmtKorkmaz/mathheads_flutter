@@ -3,10 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
+import 'package:social_mathematicians/model/post_model.dart';
 import 'package:social_mathematicians/model/user_model.dart';
+import 'package:social_mathematicians/services/auth_service.dart';
 import 'package:social_mathematicians/services/firestore_service.dart';
 import 'package:social_mathematicians/widgets/appbar_logo.dart';
+
+import '../../widgets/hero_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String uid;
@@ -16,7 +19,7 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends Const<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -48,6 +51,11 @@ class _ProfilePageState extends Const<ProfilePage> {
     getCurrentUser();
   }
 
+  AuthService auth = Get.put(AuthService());
+  void signOut() {
+    auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +69,7 @@ class _ProfilePageState extends Const<ProfilePage> {
                 )
               : Container()
         ],
-        title: const AppbarLogo(),
+        title: GestureDetector(onTap: signOut, child: const AppbarLogo()),
       ),
       body: FutureBuilder(
           future: _firestore.collection('users').doc(widget.uid).get(),
@@ -75,8 +83,7 @@ class _ProfilePageState extends Const<ProfilePage> {
               );
             }
 
-            var json = snapshot.data!.data();
-            UserModel user = UserModel.fromjson(json as Map);
+            UserModel user = UserModel.fromSnapshot(snapshot.requireData);
 
             return Stack(
               children: [
@@ -93,7 +100,7 @@ class _ProfilePageState extends Const<ProfilePage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 30.0, vertical: 5),
                                 child: Text(
-                                  !isFollow ? 'Follow' : 'Unfollow',
+                                  !isFollow ? 'follow'.tr : 'unfollow'.tr,
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -102,83 +109,87 @@ class _ProfilePageState extends Const<ProfilePage> {
                           ),
                         ),
                       )
-                    : Container(),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(1),
-                                decoration: const ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: OvalBorder(
-                                    side: BorderSide(
-                                        width: 1.50, color: Color(0xFFFA9884)),
+                    : const SizedBox.shrink(),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(1),
+                                  decoration: const ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: OvalBorder(
+                                      side: BorderSide(
+                                          width: 1.50,
+                                          color: Color(0xFFFA9884)),
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:
+                                        NetworkImage(user.photoUrl),
                                   ),
                                 ),
-                                child: CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: NetworkImage(user.photoUrl),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 7.0),
+                                  child: Text(
+                                    user.name,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 7.0),
-                                child: Text(
-                                  user.name,
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('posts'.tr),
+                                Text(
+                                  user.posts.length.toString(),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              const Text('Posts'),
-                              Text(
-                                user.posts.length.toString(),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              const Text('Followers'),
-                              Text(
-                                user.followers.length.toString(),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              const Text('Follows'),
-                              Text(
-                                user.follows.length.toString(),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('followers'.tr),
+                                Text(
+                                  user.followers.length.toString(),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('follows'.tr),
+                                Text(
+                                  user.follows.length.toString(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        ' ° ${user.description}',
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          ' ° ${user.description}',
+                        ),
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Divider(),
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        width: MediaQuery.of(context).size.width,
-                        child: _buildUserPosts(user.posts))
-                  ],
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Divider(),
+                      ),
+                      SizedBox(
+                          height: context.height * (0.5),
+                          width: context.width * (1),
+                          child: _buildUserPosts(user.posts))
+                    ],
+                  ),
                 ),
               ],
             );
@@ -188,7 +199,7 @@ class _ProfilePageState extends Const<ProfilePage> {
 
   Widget _buildUserPosts(List userPosts) {
     if (userPosts.isEmpty) {
-      return const Center(child: Text('There is no post yet!'));
+      return Center(child: Text('noPost'.tr));
     }
     return GridView.builder(
         gridDelegate:
@@ -205,15 +216,24 @@ class _ProfilePageState extends Const<ProfilePage> {
                   child: Lottie.asset('assets/lottie/loading_lottie.json'),
                 );
               }
-              var data = snapshot.data!.data();
 
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  image: DecorationImage(
-                      image: NetworkImage(data?['postPhotoUrl'][0]),
-                      fit: BoxFit.cover),
+              PostModel post = PostModel.fromSnap(snapshot.data!);
+
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => HeroPage(
+                        post: post,
+                      ));
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                        image: NetworkImage(post.postPhotoUrl[0]),
+                        fit: BoxFit.cover),
+                  ),
                 ),
               );
             }))));

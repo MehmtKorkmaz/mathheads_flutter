@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
 import 'package:social_mathematicians/services/auth_service.dart';
 import 'package:social_mathematicians/views/world/add_post_view.dart';
-import 'package:social_mathematicians/views/world/home_page.dart';
+import 'package:social_mathematicians/views/homePage/home_page.dart';
 import 'package:social_mathematicians/views/profile/profile_page.dart';
 import 'package:social_mathematicians/views/search/search_page.dart';
 
@@ -16,8 +15,8 @@ class MyNavBar extends StatefulWidget {
   State<MyNavBar> createState() => _MyNavBarState();
 }
 
-class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
-  String uid = FirebaseAuth.instance.currentUser!.uid.trim();
+class _MyNavBarState extends State<MyNavBar> with TickerProviderStateMixin {
+  String uid = FirebaseAuth.instance.currentUser!.uid;
   AuthService auth = Get.put(AuthService());
 
   int _selectedIndex = 0;
@@ -57,8 +56,8 @@ class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
         barrierLabel: 'c',
         barrierColor: Colors.black.withOpacity(0.8),
         context: context,
-        pageBuilder: (context, _, __) {
-          return const AddPost();
+        pageBuilder: (_, __, ___) {
+          return Container();
         });
   }
 
@@ -94,7 +93,7 @@ class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
-            height: dynamicHeight(0.1),
+            height: context.height * (0.1),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               color: Color.fromARGB(255, 53, 52, 52),
@@ -102,7 +101,7 @@ class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
                 BoxShadow(
                   color: Colors.black.withOpacity(.15),
                   blurRadius: 30,
-                  offset: Offset(0, 10),
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
@@ -134,16 +133,17 @@ class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         AnimatedContainer(
-                          duration: Duration(milliseconds: 1000),
+                          duration: const Duration(milliseconds: 1500),
                           curve: Curves.fastLinearToSlowEaseIn,
                           margin: EdgeInsets.only(
                             bottom: index == _selectedIndex ? 0 : 1,
-                            right: dynamicWidth(0.06),
-                            left: dynamicWidth(0.0422),
+                            right: context.width * (0.06),
+                            left: context.width * (0.04),
                           ),
-                          width: dynamicWidth(0.12),
-                          height:
-                              index == _selectedIndex ? dynamicWidth(0.014) : 0,
+                          width: context.width * (0.125),
+                          height: index == _selectedIndex
+                              ? context.width * (0.015)
+                              : 0,
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.vertical(
@@ -152,12 +152,17 @@ class _MyNavBarState extends Const<MyNavBar> with TickerProviderStateMixin {
                           ),
                         ),
                         (index == 0 || index == 1)
-                            ? Lottie.asset(lotties[index],
-                                controller: (index == 0)
-                                    ? homeIconController
-                                    : worldIconController,
-                                repeat: true,
-                                height: 40)
+                            ? SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Lottie.asset(
+                                  lotties[index],
+                                  controller: (index == 0)
+                                      ? homeIconController
+                                      : worldIconController,
+                                  repeat: true,
+                                ),
+                              )
                             : icons[index - 2]
                       ],
                     ),

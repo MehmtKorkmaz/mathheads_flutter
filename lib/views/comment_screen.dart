@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_mathematicians/helpers/consts.dart';
 import 'package:social_mathematicians/model/post_model.dart';
 
 import '../model/comment_model.dart';
@@ -18,7 +18,7 @@ class CommentScreen extends StatefulWidget {
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
-class _CommentScreenState extends Const<CommentScreen> {
+class _CommentScreenState extends State<CommentScreen> {
   TextEditingController commentController = TextEditingController();
   FireStoreService fireStoreService = Get.put(FireStoreService());
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -38,8 +38,8 @@ class _CommentScreenState extends Const<CommentScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: dynamicHeight(0.7),
-        width: dynamicWidth(0.9),
+        height: context.height * (0.72),
+        width: context.width * (0.9),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: Colors.white.withOpacity(0.95),
@@ -51,12 +51,12 @@ class _CommentScreenState extends Const<CommentScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  'C O M M E N T S',
-                  style: themeData.textTheme.headlineSmall,
+                  'commentHeader'.tr,
+                  style: context.theme.textTheme.headlineSmall,
                 ),
               ),
               Container(
-                  height: dynamicHeight(0.46),
+                  height: context.height * (0.46),
                   decoration: BoxDecoration(
                       color: Colors.blueGrey[50],
                       borderRadius: BorderRadius.circular(25)),
@@ -79,8 +79,7 @@ class _CommentScreenState extends Const<CommentScreen> {
                           snapshot.data as DocumentSnapshot<Object?>);
 
                       if (post.comments.isEmpty) {
-                        return const Center(
-                            child: Text('There is no comment yet.'));
+                        return Center(child: Text('noComment'.tr));
                       } else {
                         return ListView.builder(
                             itemCount: post.comments.length,
@@ -97,11 +96,14 @@ class _CommentScreenState extends Const<CommentScreen> {
                                   style: const TextStyle(color: Colors.black),
                                 ),
                                 subtitle: Text(comment.comment),
-                                trailing: GestureDetector(
-                                    onTap: () {
-                                      deleteComment(comment.commentId);
-                                    },
-                                    child: const Icon(Icons.cancel)),
+                                trailing: (comment.uid ==
+                                        FirebaseAuth.instance.currentUser!.uid)
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          deleteComment(comment.commentId);
+                                        },
+                                        child: const Icon(Icons.cancel))
+                                    : Container(),
                               );
                             }));
                       }
@@ -109,16 +111,16 @@ class _CommentScreenState extends Const<CommentScreen> {
                   )),
               MyTextfield(
                   controller: commentController,
-                  hintText: 'Write Something',
+                  hintText: 'commentHint'.tr,
                   isObscured: false,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.message,
                     color: Colors.black87,
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: MyButton(
-                  buttonText: 'Send',
+                  buttonText: 'send'.tr,
                   onTap: sendComment,
                 ),
               )

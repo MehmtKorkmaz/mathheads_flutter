@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:social_mathematicians/views/auth/login_or_register.dart';
 import 'package:social_mathematicians/widgets/bottom_nav_bar.dart';
 
@@ -20,7 +21,9 @@ class _AuthGateState extends State<AuthGate> with TickerProviderStateMixin {
             if (snapshot.hasData) {
               return const MyNavBar();
             } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: Lottie.asset('assets/lottie/loading_lottie.json'),
+              );
             } else {
               return const LoginOrRegister();
             }
